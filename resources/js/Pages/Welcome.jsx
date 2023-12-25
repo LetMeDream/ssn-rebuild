@@ -4,47 +4,48 @@ export default function Welcome ({ auth, laravelVersion, phpVersion }) {
   const styles = {
     welcome: ' mx-auto w-full p-1 bg-general-gray h-[280px] top-[20px] flex items-center flex-col justify-around relative',
     logoImg: ' w-[120px]',
-    servicesContainer: 'p-1 w-[80%] lg:w-[70%]  flex justify-center relative flex flex-col ',
+    servicesContainer: 'py-[60px] w-[80%] lg:w-[70%]  flex justify-center relative flex-col ',
     servicesRowInner: ' flex gap-[60px] lg:gap-[100px] justify-between mb-6 ',
-    servicesRowOuter: ' flex flex-col ',
+    servicesRowOuter: '',
     service: ' w-[80%] md:w-full group flex flex-col items-center',
     styledP: ' text-center cursor-pointer group-hover:text-blue-800 text-[15px] transition-all'
   }
+  const route = window.route
 
   return (
     <>
       <Head title='Welcome' />
       <div className=' flex flex-col items-center justify-between min-h-screen'>
         {/* <div className="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
-							{auth.user ? (
-									<Link
-											href={route('dashboard')}
-											className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-									>
-											Dashboard
-									</Link>
-							) : (
-									<>
-											<Link
-													href={route('login')}
-													className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-											>
-													Log in
-											</Link>
+            {auth.user ? (
+                <Link
+                    href={route('dashboard')}
+                    className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                >
+                    Dashboard
+                </Link>
+            ) : (
+                <>
+                    <Link
+                        href={route('login')}
+                        className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                    >
+                        Log in
+                    </Link>
 
-											<Link
-													href={route('register')}
-													className="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-											>
-													Register
-											</Link>
-									</>
-							)}
-					</div> */}
+                    <Link
+                        href={route('register')}
+                        className="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                    >
+                        Register
+                    </Link>
+                </>
+            )}
+        </div> */}
 
         <div className={styles.welcome}>
           <img src='images/ssn.png' className={styles.logoImg} alt='SSN logo' />
-          <p className='relative bottom-[1rem] text-[26px] font-roboto font-semibold'>Bienvenido a Sistemas y Servicios Nuñez</p>
+          <p className='relative bottom-[1rem] text-center text-[26px] font-roboto font-semibold'>Bienvenido a Sistemas y Servicios Nuñez</p>
           <p className='text-[16px] relative bottom-[1.6rem] font-roboto font-semibold'>¿Con qué necesitas ayuda?</p>
         </div>
 
@@ -101,13 +102,13 @@ export default function Welcome ({ auth, laravelVersion, phpVersion }) {
       </div>
 
       <style>{`
-					.bg-dots-darker {
-					}
-					@media (prefers-color-scheme: dark) {
-							.dark\\:bg-dots-lighter {
-							}
-					}
-			`}
+        .bg-dots-darker {
+        }
+        @media (prefers-color-scheme: dark) {
+            .dark\\:bg-dots-lighter {
+            }
+        }
+      `}
       </style>
     </>
   )
