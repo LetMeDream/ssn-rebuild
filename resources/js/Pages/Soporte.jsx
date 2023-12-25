@@ -1,7 +1,9 @@
-import { Head } from '@inertiajs/react'
+import { Head, router, usePage } from '@inertiajs/react'
 import { useForm } from 'react-hook-form'
-import { useEffect } from 'react'
-import classNames from 'classnames'
+import InputGroup from '@/Components/Inputs/InputGroup'
+import RadioGroup from '@/Components/Inputs/RadioGroup'
+import { notification, Alert } from 'antd'
+import { useEffect, useState } from 'react'
 
 const Soporte = () => {
   const styles = {
@@ -19,20 +21,64 @@ const Soporte = () => {
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors }
+    formState: { errors },
+    trigger, getValues, reset
   } = useForm()
 
-  const onSubmit = (data) => console.log(data)
+  const onSubmit = () => {
+    router.post('soporte', getValues())
+  }
+
+  const validate = async () => {
+    if (!await trigger()) {
+      notification.error({
+        message: 'Oops!',
+        description: 'Campos faltantes'
+      })
+    }
+  }
+
+  const { flash } = usePage().props
 
   useEffect(() => {
-    console.log(errors)
-  }, [errors])
+    if (flash?.message?.title?.length) {
+      notification.success({
+        message: flash?.message?.title,
+        description: flash?.message?.description
+      })
+      setOpen(true)
+      console.log(flash)
+      reset()
+    }
+  }, [flash])
+
+  const [open, setOpen] = useState(true)
+  const onClose = function (e) {
+    console.log(e, 'I was closed.')
+    setOpen(false)
+  }
+  let alert
+  if (flash?.message?.title?.length && open) {
+    alert = (
+      <>
+        <div className='max-w-lg w-full'>
+          <Alert
+            className='mb-2 rounded-md p-4 py-2 w-full'
+            message='Solicitud enviada. En breve nos contactaremos con usted.'
+            type='success'
+            closable
+            onClose={onClose}
+          />
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
       <Head title='Soporte' />
-      <div className=' bg-clearBlue min-h-screen h-[calc(100%+80px)]'>
+      <div className=' bg-clearBlue min-h-screen h-[calc(100%+80px)] px-[.75rem]'>
+
         <div className={styles.welcome + ' '}>
           <p className='relative text-[22px] top-[20px] text-muted font-roboto font-regular'>
             Has escogido nuestro
@@ -48,82 +94,58 @@ const Soporte = () => {
         <form
           className={styles.form}
           onSubmit={handleSubmit(onSubmit)}
+          method='post'
         >
+          {flash?.message?.title && alert}
           {/* Name */}
-          <label className={styles.formControl + ' relative'}>
-            <div className='label pb-0'>
-              <span className='label-text-alt text-sm'>Nombre</span>
-            </div>
-            <input
-              {...register('nombre', { required: 'Éste campo es requerido' })}
-              className={classNames(styles.input, {
-                'input-error': errors.nombre
-              })}
-              type='text'
-              placeholder='Nombre'
-            />
-            {
-              errors.nombre?.message?.length
-                ? (<span className={styles.error}>
-                  {errors.nombre?.message}
-                </span>)
-                : null
-            }
-
-          </label>
+          <InputGroup
+            register={register}
+            errors={errors}
+            name='nombre'
+            placeholder='Nombre'
+          />
           {/* Lastname */}
-          <label className={styles.formControl}>
-            <div className='label pb-0'>
-              <span className='label-text-alt text-sm'>Apellido</span>
-            </div>
-            <input {...register('apellido', { required: true })} type='text' placeholder='Apellido' className={styles.input} />
-          </label>
+          <InputGroup
+            register={register}
+            errors={errors}
+            name='apellido'
+            placeholder='Apellido'
+          />
           {/* Phone Number */}
-          <label className={styles.formControl}>
-            <div className='label pb-0'>
-              <span className='label-text-alt text-sm'>Teléfono</span>
-            </div>
-            <input {...register('phone', { required: true })} type='number' placeholder='0414-1234567' className={styles.input} />
-          </label>
+          <InputGroup
+            register={register}
+            errors={errors}
+            name='phone'
+            label='Teléfono'
+            placeholder='Teléfono'
+            type='number'
+          />
           {/* Whatsapp */}
-          <label className={styles.formControl}>
-            <div className='label pb-0'>
-              <span className='label-text-alt text-sm'>¿Tienes Whatsapp?</span>
-            </div>
-            <div className='flex justify-center gap-40'>
-              <label className='flex gap-2 items-center'>
-                <p className='text-muted'>Sí</p>
-                <input {...register('whatsApp', { required: true })} value='yes' type='radio' name='whatsApp' className={styles.radio} />
-              </label>
-              <label className='flex gap-2 items-center'>
-                <p className='text-muted'>No</p>
-                <input {...register('whatsApp', { required: true })} value='no' type='radio' name='whatsApp' className={styles.radio} />
-              </label>
-            </div>
-          </label>
+          <RadioGroup
+            register={register}
+            name='whatsapp'
+            label='¿Tienes Whatsapp?'
+            options={['yes', 'no']}
+            errors={errors}
+          />
           {/* Mail */}
-          <label className={styles.formControl}>
-            <div className='label pb-0'>
-              <span className='label-text-alt text-sm'>Correo</span>
-            </div>
-            <input {...register('mail', { required: true })} type='mail' placeholder='email@mail.com' className={styles.input} />
-          </label>
+          {/* Phone Number */}
+          <InputGroup
+            register={register}
+            errors={errors}
+            name='mail'
+            label='Correo'
+            placeholder='Email@mail.co'
+            type='mail'
+          />
           {/* What kind of computer do you have */}
-          <label className={styles.formControl}>
-            <div className='label pb-0'>
-              <span className='label-text-alt text-sm'>¿Qué equipo tienes?</span>
-            </div>
-            <div className='flex justify-center gap-40'>
-              <label className='flex gap-2 items-center'>
-                <p className='text-muted'>Computadora</p>
-                <input {...register('computer', { required: true })} value='desktop' type='radio' name='computer' className={styles.radio} />
-              </label>
-              <label className='flex gap-2 items-center'>
-                <p className='text-muted'>Laptop</p>
-                <input {...register('computer', { required: true })} value='laptop' type='radio' name='computer' className={styles.radio} />
-              </label>
-            </div>
-          </label>
+          <RadioGroup
+            register={register}
+            name='computer'
+            label='¿Qué equipo posees?'
+            options={['computadora', 'laptop']}
+            errors={errors}
+          />
           {/* Message */}
           <label className={styles.formControl}>
             <div className='label pb-0'>
@@ -133,7 +155,7 @@ const Soporte = () => {
           </label>
 
           {/* Submit */}
-          <button className={styles.sendBtn}>Enviar</button>
+          <button onClick={validate} className={styles.sendBtn}>Enviar</button>
 
         </form>
       </div>
