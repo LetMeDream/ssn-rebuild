@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ServicioTecnicoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,9 +26,11 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/soporte', function () {
+Route::get('soporte', function () {
     return Inertia::render('Soporte');
 })->name('soporte');
+
+Route::post('soporte', [ServicioTecnicoController::class, 'store'])->name('soporte');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
